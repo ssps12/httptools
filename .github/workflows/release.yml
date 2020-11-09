@@ -121,8 +121,51 @@ jobs:
         name: dist
         path: dist/
 
+  build-linux-arm64:
+    name: Linux
+    strategy:
+      matrix:
+        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
+        arch: [aarch64]
+      fail-fast: false
+    runs-on: ubuntu-16.04
+    env:
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_${{ matrix.arch }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Available platforms
+      run: echo ${{ steps.qemu.outputs.platforms }}
+    - name: Install tools
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel
+    - name: Build Wheels (linux)
+      if: startsWith(matrix.os, 'ubuntu')
+      uses: docker://quay.io/pypa/manylinux2014_aarch64
+      env:
+        PYTHON_VERSION: ${{ env.py }}
+      with:
+        entrypoint: /github/workspace/.github/workflows/build-manylinux-wheels.sh
+    - name: Test Wheels
+      if: |
+        !startsWith(matrix.os, 'windows')
+        && !contains(github.event.pull_request.labels.*.name, 'skip wheel tests')
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }} ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
+          ${{ env.img }} make -C "${GITHUB_WORKSPACE}" testinstalled
+    - uses: actions/upload-artifact@v1
+      with:
+        name: dist
+        path: dist/
+
   publish:
-    needs: [build-sdist, build-wheels]
+    needs: [build-sdist, build-wheels, build-linux-arm64]
     runs-on: ubuntu-latest
 
     steps:
