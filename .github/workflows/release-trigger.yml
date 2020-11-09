@@ -14,7 +14,6 @@ jobs:
       id: release
       continue-on-error: true
       with:
-        github_token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
         version_file: httptools/_version.py
         version_line_pattern: |
           __version__\s*=\s*(?:['"])([[:PEP440:]])(?:['"])
