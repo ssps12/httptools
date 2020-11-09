@@ -62,7 +62,6 @@ jobs:
     env:
       py: /opt/python/${{ matrix.pyver }}/bin/python
       img: quay.io/pypa/manylinux2014_${{ matrix.arch }}
-    needs: pre-deploy
 
     steps:
     - uses: actions/checkout@v1
@@ -93,4 +92,3 @@ jobs:
       run: |      
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} ${{ env.py }} setup.py test
-       
