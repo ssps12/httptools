@@ -19,7 +19,6 @@ jobs:
         version_line_pattern: |
           __version__\s*=\s*(?:['"])([[:PEP440:]])(?:['"])
     - name: Trigger release
-      uses: edgedb/action-release/trigger@master
       with:
         github_token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
         release_validation_check: "validate-release-request"
