@@ -14,12 +14,12 @@ jobs:
       id: release
       continue-on-error: true
       with:
-        github_token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
+        github_token: dbb25c5f67ceb45ede0680348b17aff5d650ca08
         version_file: httptools/_version.py
         version_line_pattern: |
           __version__\s*=\s*(?:['"])([[:PEP440:]])(?:['"])
     - name: Trigger release
       uses: edgedb/action-release/trigger@master
       with:
-        github_token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
+        github_token: dbb25c5f67ceb45ede0680348b17aff5d650ca08
         release_validation_check: "validate-release-request"
