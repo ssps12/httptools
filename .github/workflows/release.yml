@@ -22,12 +22,6 @@ jobs:
         version_line_pattern: |
           __version__\s*=\s*(?:['"])([[:PEP440:]])(?:['"])
 
-    - name: Stop if not approved
-      if: steps.checkver.outputs.approved != 'false'
-      run: |
-        echo ::error::PR is not approved yet.
-        exit 1
-
     - name: Store release version for later use
       env:
         VERSION: ${{ steps.checkver.outputs.version }}
