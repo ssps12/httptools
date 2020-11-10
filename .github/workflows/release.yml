@@ -17,7 +17,6 @@ jobs:
       uses: edgedb/action-release/validate-pr@master
       id: checkver
       with:
-        github_token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
         version_file: httptools/_version.py
         version_line_pattern: |
           __version__\s*=\s*(?:['"])([[:PEP440:]])(?:['"])
@@ -189,7 +188,6 @@ jobs:
     - name: Merge and tag the PR
       uses: edgedb/action-release/merge@master
       with:
-        github_token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
         ssh_key: ${{ secrets.RELEASE_BOT_SSH_KEY }}
         gpg_key: ${{ secrets.RELEASE_BOT_GPG_KEY }}
         gpg_key_id: "5C468778062D87BF!"
@@ -197,8 +195,6 @@ jobs:
 
     - name: Publish Github Release
       uses: elprans/gh-action-create-release@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ steps.relver.outputs.version }}
         release_name: v${{ steps.relver.outputs.version }}
