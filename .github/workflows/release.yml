@@ -115,7 +115,7 @@ jobs:
         name: dist
         path: dist/
 
-  build-linux-arm64:
+  build-linux-aarch64:
     name: Linux
     strategy:
       matrix:
