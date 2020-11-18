@@ -144,7 +144,6 @@ jobs:
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel
     - name: Build Wheels (linux)
-      if: startsWith(matrix.os, 'ubuntu')
       uses: docker://quay.io/pypa/manylinux2014_aarch64
       env:
         PYTHON_VERSION: ${{ env.py }}
