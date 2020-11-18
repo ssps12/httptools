@@ -164,7 +164,7 @@ jobs:
         path: dist/
 
   publish:
-    needs: [build-sdist, build-wheels, build-linux-arm64]
+    needs: [build-sdist, build-wheels, build-linux-aarch64]
     runs-on: ubuntu-latest
 
     steps:
