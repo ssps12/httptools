@@ -142,13 +142,15 @@ jobs:
     - name: Install tools and pip
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel
-    - name: Build Wheels (linux)
-      uses: docker://quay.io/pypa/manylinux2014_aarch64
-      env:
-        PYTHON_VERSION: ${{ env.py }}
-      with:
-        entrypoint: /github/workspace/.github/workflows/build-manylinux-wheels.sh
+          ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1
+    - name: make clean (linux)
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }} make clean
+    - name: make clean (linux)
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }} ${{ env.py }}  setup.py bdist_wheel
     - name: Test Wheels
       if: |
         !startsWith(matrix.os, 'windows')
