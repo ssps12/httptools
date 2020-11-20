@@ -147,7 +147,7 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} make clean
-    - name: make clean (linux)
+    - name: submodule (linux)
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} git submodule update --init
@@ -155,10 +155,10 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} ${{ env.py }}  setup.py bdist_wheel
-    - name: Build wheel (linux)
+    - name: auditwheel (linux)
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} auditwheel repair $whl -w "${GITHUB_WORKSPACE}"/dist/
+          ${{ env.img }} auditwheel repair dist/*.whl --wheel-dir wheelhouse/
     - name: Test Wheels
       if: |
         !startsWith(matrix.os, 'windows')
