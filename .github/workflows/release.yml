@@ -148,11 +148,11 @@ jobs:
           ${{ env.img }} \
           bash -exc '\
             ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1 pytest && \
-            make clean \
-            git submodule update --init \
+            make clean && \
+            git submodule update --init && \
             ${{ env.py }}  setup.py bdist_wheel && \
             auditwheel repair dist/*.whl --wheel-dir dist/ && \
-            ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist" \
+            ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist" && \
             pytest __init__.py \
           '
     - uses: actions/upload-artifact@v1
