@@ -139,26 +139,6 @@ jobs:
       uses: docker/setup-qemu-action@v1
     - name: Available platforms
       run: echo ${{ steps.qemu.outputs.platforms }}
-    - name: Install tools and pip
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1 pytest
-    - name: make clean (linux)
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} make clean
-    - name: submodule (linux)
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} git submodule update --init
-    - name: Build wheel (linux)
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }}  setup.py bdist_wheel
-    - name: auditwheel (linux)
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} auditwheel repair dist/*.whl --wheel-dir dist/
     - name: Install Wheels
       if: |
         !startsWith(matrix.os, 'windows')
@@ -167,8 +147,13 @@ jobs:
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} \
           bash -exc '\
-            ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
-            pytest __init__.py
+            ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1 pytest && \
+            make clean \
+            git submodule update --init \
+            ${{ env.py }}  setup.py bdist_wheel && \
+            auditwheel repair dist/*.whl --wheel-dir dist/ && \
+            ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist" \
+            pytest __init__.py \
           '
     - uses: actions/upload-artifact@v1
       with:
