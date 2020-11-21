@@ -165,22 +165,11 @@ jobs:
         && !contains(github.event.pull_request.labels.*.name, 'skip wheel tests')
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
-    - name: pwd (linux)
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} pwd
-    - name: ls (linux)
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ls
-    - name: Test Wheels
-      if: |
-        !startsWith(matrix.os, 'windows')
-        && !contains(github.event.pull_request.labels.*.name, 'skip wheel tests')
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} make -C "${pwd}" testinstalled
+          ${{ env.img }} \
+          bash -exc '\
+            ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
+            make -C "${GITHUB_WORKSPACE}" testinstalled
+          '
     - uses: actions/upload-artifact@v1
       with:
         name: dist
