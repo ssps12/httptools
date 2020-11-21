@@ -158,15 +158,21 @@ jobs:
     - name: auditwheel (linux)
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} auditwheel repair dist/*.whl --wheel-dir wheelhouse/
-    - name: Test Wheels
+          ${{ env.img }} auditwheel repair dist/*.whl --wheel-dir dist/
+    - name: Install Wheels
       if: |
         !startsWith(matrix.os, 'windows')
         && !contains(github.event.pull_request.labels.*.name, 'skip wheel tests')
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
-          ${{ env.img }} make -C "${GITHUB_WORKSPACE}" testinstalled
+    - name: Test Wheels
+      if: |
+        !startsWith(matrix.os, 'windows')
+        && !contains(github.event.pull_request.labels.*.name, 'skip wheel tests')
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          ${{ env.img }}make -C "${GITHUB_WORKSPACE}" testinstalled
     - uses: actions/upload-artifact@v1
       with:
         name: dist
