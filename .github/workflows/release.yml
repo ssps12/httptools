@@ -168,7 +168,7 @@ jobs:
           ${{ env.img }} \
           bash -exc '\
             ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
-            make -C "${GITHUB_WORKSPACE}" testinstalled
+            make testinstalled
           '
     - uses: actions/upload-artifact@v1
       with:
