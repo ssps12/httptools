@@ -142,7 +142,7 @@ jobs:
     - name: Install tools and pip
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1
+          ${{ env.img }} ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1 pytest
     - name: make clean (linux)
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
@@ -168,7 +168,7 @@ jobs:
           ${{ env.img }} \
           bash -exc '\
             ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist"
-            make testinstalled
+            pytest __init__.py
           '
     - uses: actions/upload-artifact@v1
       with:
