@@ -180,7 +180,7 @@ jobs:
         && !contains(github.event.pull_request.labels.*.name, 'skip wheel tests')
       run: |
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-          ${{ env.img }}make -C "${GITHUB_WORKSPACE}" testinstalled
+          ${{ env.img }}make -C "/ws" testinstalled
     - uses: actions/upload-artifact@v1
       with:
         name: dist
