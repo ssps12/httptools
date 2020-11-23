@@ -147,13 +147,13 @@ jobs:
         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
           ${{ env.img }} \
           bash -exc '\
-            ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1 pytest && uname -m && echo $PATH && find / -type f -name pytest &&\
+            ${{ env.py }} -m pip install --upgrade setuptools pip wheel~=0.31.1 pytest && export PATH=/opt/_internal/cpython-3.8.6/bin:$PATH && echo $PATH &&\
             make clean && \
             git submodule update --init && \
             ${{ env.py }}  setup.py bdist_wheel && \
             auditwheel repair dist/*.whl --wheel-dir dist/ && \
             ${{ env.py }} -m pip install --pre httptools -f "file:///${GITHUB_WORKSPACE}/dist" && \
-            echo $PATH && uname -m && pytest tests/__init__.py \
+            echo $PATH && pytest tests/__init__.py \
           '
     - uses: actions/upload-artifact@v1
       with:
