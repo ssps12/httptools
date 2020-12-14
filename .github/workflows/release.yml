@@ -127,7 +127,6 @@ jobs:
             rm -f dist/*-linux_*.whl && \
             pip install --pre httptools -f "file:///ws/dist" && \
             pytest tests/__init__.py'
-
     - name: Build Wheels (non-linux)
       if: "!startsWith(matrix.os, 'ubuntu')"
       run: |
@@ -146,7 +145,7 @@ jobs:
         path: dist/
 
   publish:
-    needs: [build-sdist, build-wheels, build-linux-aarch64]
+    needs: [build-sdist, build-wheels]
     runs-on: ubuntu-latest
 
     steps:
