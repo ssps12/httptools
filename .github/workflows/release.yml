@@ -69,8 +69,8 @@ jobs:
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
-	pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
-	arch: [x86_64, aarch64]
+        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
+        arch: [x86_64, aarch64]
         os: [ubuntu-16.04, macos-latest, windows-latest]
         exclude:
           # Python 3.5 is unable to properly
