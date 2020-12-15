@@ -13,6 +13,9 @@ fi
 # Compile wheels
 PYTHON="/opt/python/${ML_PYTHON_VERSION}/bin/python"
 PIP="/opt/python/${ML_PYTHON_VERSION}/bin/pip"
+find / -type f -name python
+find / -type f -name python3
+pwd
 "${PIP}" install --upgrade setuptools pip wheel~=0.31.1
 cd "${GITHUB_WORKSPACE}"
 make clean
