@@ -85,7 +85,7 @@ jobs:
         submodules: true
 
     - name: Set up Python ${{ matrix.python-version }}
-      if: !startsWith(matrix.arch, 'aarch64')
+      #if: !startsWith(matrix.arch, 'aarch64')
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
