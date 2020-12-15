@@ -83,7 +83,7 @@ jobs:
       with:
         fetch-depth: 50
         submodules: true
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       if: !startsWith(matrix.arch, 'aarch64')
       uses: actions/setup-python@v1
       with:
